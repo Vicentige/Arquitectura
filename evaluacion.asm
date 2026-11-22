@@ -250,15 +250,15 @@ FIN:
 
 INIT_RANDOM:
     MOV AH, 2Ch
-    INT 21h
-    MOV BP, DX
-    CMP DX, 0
+    INT 21h              ; Devuelve segundos y centesimas en DX
+    MOV AX, DX           ; Lo pasamos directo a AX
+    CMP AX, 0
     JE  USAR_DEFECTO
     RET   
     
 USAR_DEFECTO:
-    MOV BP, 1ACEh
-    RET 
+    MOV AX, 1ACEh
+    RET
     
 
 ;Subrutinas necesarias
@@ -290,12 +290,7 @@ ROBAR_CARTA:
     PUSH SI
     PUSH DI
 
-    ; Usar la semilla BP (de INIT_RANDOM) para generar indice aleatorio
-    MOV AX, BP
-    MOV BX, 25173
-    MUL BX               ; DX:AX = BP * 25173
-    ADD AX, 13849
-    MOV BP, AX           ; Guardamos la nueva semilla para el proximo robo
+    CALL INIT_RANDOM     ; Ya deja el numero aleatorio listo en AX
     MOV DX, 0
     MOV BL, CARTAS_RESTANTES
     MOV BH, 0
@@ -304,10 +299,9 @@ ROBAR_CARTA:
     MOV AL, MAZO_VAL[SI]
     MOV AH, MAZO_PINTA[SI]
 
-    ;Eliminar carta intercambiando con la ultima dispobible
     DEC CARTAS_RESTANTES
     MOV BL, CARTAS_RESTANTES
-    MOV BH,  0
+    MOV BH, 0
     MOV DI, BX
     MOV BL, MAZO_VAL[DI]
     MOV MAZO_VAL[SI], BL
@@ -319,7 +313,6 @@ ROBAR_CARTA:
     POP DX
     POP CX
     POP BX
-    
     RET
 
 
