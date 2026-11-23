@@ -568,7 +568,7 @@ RESOLVER_RONDA:
     JA R_GANA_J1    ;Salta si el primero es mayor 
     JB R_GANA_J2    ;Salta si el primero es menor
     
-    ;Si los dos tienen mismos puntajes, se desempata con la carta más Carta mas alta
+    ;Si los dos tienen mismos puntajes, se desempata con la carta m�s Carta mas alta
     CMP AL, 1
     JNE R_EMPATE        ;Salta si no es igual
     MOV AL, C_ALTA_J1

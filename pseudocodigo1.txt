@@ -1,0 +1,56 @@
+INICIO
+    aciertos <- 0
+    ronda <- 1
+
+    MIENTRAS ronda <= 5 HACER
+        // 1. Generación de datos aleatorios
+        op1 <- ALEATORIO(0, 99)
+        op2 <- ALEATORIO(0, 99)
+        operador <- ALEATORIO(0, 2)      // 0: Suma (+), 1: Resta (-), 2: División (/)
+
+        // Evitar división por cero o resultados negativos en resta
+        SI operador == 2 Y op2 == 0 ENTONCES
+            op2 <- 1
+        FIN SI
+        SI operador == 1 Y op1 < op2 ENTONCES
+            INTERCAMBIAR(op1, op2)
+        FIN SI
+
+        // 2. Cálculo del resultado correcto
+        SEGUN operador HACER
+            CASO 0: resCorrecto <- op1 + op2
+            CASO 1: resCorrecto <- op1 - op2
+            CASO 2: resCorrecto <- op1 DIV op2
+        FIN SEGUN
+
+        // 3. Generación de 5 alternativas (1 correcta y 4 distractores distintos)
+        posCorrecta <- ALEATORIO(1, 5)
+        PARA i DESDE 1 HASTA 5 HACER
+            SI i == posCorrecta ENTONCES
+                opciones[i] <- resCorrecto
+            SINO
+                opciones[i] <- GENERAR_DISTRACTOR(resCorrecto)
+            FIN SI
+        FIN PARA
+
+        // 4. Despliegue en pantalla y lectura de respuesta
+        MOSTRAR "Ronda ", ronda, ": ", op1, simbolo(operador), op2, " = ?"
+        MOSTRAR opciones[1..5]
+        LEER seleccion
+
+        // 5. Validación
+        SI seleccion == posCorrecta ENTONCES
+            aciertos <- aciertos + 1
+            ronda <- ronda + 1
+        SINO
+            IR A DERROTA
+        FIN SI
+    FIN MIENTRAS
+
+    MOSTRAR "VICTORIA! Puntaje obtenido: ", aciertos, " de 5"
+    IR A FIN
+
+DERROTA:
+    MOSTRAR "DERROTA! Puntaje obtenido: ", aciertos, " de 5"
+
+FIN

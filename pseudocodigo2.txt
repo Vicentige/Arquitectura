@@ -1,0 +1,80 @@
+ALGORITMO Poker_ICI
+INICIO
+    Inicializar mazo de 24 cartas (3 pintas x 8 valores)
+    cartas_restantes <- 24
+    victorias_j1 <- 0
+    victorias_j2 <- 0
+    ronda <- 1
+    MIENTRAS (victorias_j1 < 3) Y (victorias_j2 < 3) HACER
+        SI cartas_restantes < 6 ENTONCES
+            Mostrar "Se agoto el mazo"
+            TERMINAR
+        FIN SI
+        Mostrar "Ronda ", ronda
+        // Repartir 3 cartas aleatorias a cada jugador sin repetir
+        mano_j1 <- REPARTIR_MANO()
+        mano_j2 <- REPARTIR_MANO()
+        // Evaluar puntajes segun tabla de prioridades
+        (pts_j1, carta_alta_j1) <- EVALUAR_MANO(mano_j1)
+        (pts_j2, carta_alta_j2) <- EVALUAR_MANO(mano_j2)
+        Mostrar cartas y jugada de Jugador 1 y Jugador 2
+        // Definir ganador de la ronda
+        SI pts_j1 > pts_j2 ENTONCES
+            victorias_j1 <- victorias_j1 + 1
+            Mostrar "Gana Jugador 1"
+        SINO SI pts_j2 > pts_j1 ENTONCES
+            victorias_j2 <- victorias_j2 + 1
+            Mostrar "Gana Jugador 2"
+        SINO
+            SI (pts_j1 = 1) Y (carta_alta_j1 <> carta_alta_j2) ENTONCES
+                Sumar 1 victoria al de mayor carta alta
+            SINO
+                Mostrar "Empate (sin puntos)"
+            FIN SI
+        FIN SI
+        Mostrar marcador y esperar tecla para continuar
+        ronda <- ronda + 1
+    FIN MIENTRAS
+    SI victorias_j1 > victorias_j2 ENTONCES
+        Mostrar "Victoria del jugador 1"
+    SINO
+        Mostrar "Victoria del jugador 2"
+    FIN SI
+FIN
+FUNCION REPARTIR_MANO()
+    PARA i <- 1 HASTA 3 HACER
+        indice <- numero_aleatorio_reloj MOD cartas_restantes
+        carta <- mazo[indice]
+        // Eliminar carta elegida moviendo la ultima disponible a ese lugar
+        cartas_restantes <- cartas_restantes - 1
+        mazo[indice] <- mazo[cartas_restantes]
+        Guardar carta en la mano
+    FIN PARA
+    RETORNAR mano
+FIN FUNCION
+FUNCION EVALUAR_MANO(mano)
+    Ordenar las 3 cartas de menor a mayor valor
+    SI todas las cartas >= 5 ENTONCES
+        puntaje <- 15   // !Nuestros profes!
+    SINO SI son 3 consecutivas Y misma pinta ENTONCES
+        puntaje <- 10   // Escala real
+    SINO SI son 3 consecutivas ENTONCES
+        puntaje <- 5    // Escala falsa
+    SINO SI las 3 tienen el mismo valor ENTONCES
+        puntaje <- 3    // Trio
+    SINO SI 2 cartas tienen el mismo valor ENTONCES
+        puntaje <- 2    // Dos
+    SINO
+        puntaje <- 1    // Mano pobre
+    FIN SI
+    RETORNAR (puntaje, valor_mas_alto)
+FIN FUNCION
+
+
+
+
+
+
+
+
+
