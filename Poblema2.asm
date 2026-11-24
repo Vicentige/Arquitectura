@@ -129,6 +129,39 @@ ORDENAR_PAR MACRO I, J
 NO_SWAP:
 ENDM
 
+TRIOTRIO MACRO
+    LOCAL NO_TRIO
+    LOCAL FIN_TRIO
+    MOV AL, AUX_MANO + 0
+    CMP AL, AUX_MANO + 1
+    JNE NO_TRIO
+    CMP AL, AUX_MANO + 2
+    JNE NO_TRIO
+    MOV AL, 3
+    JMP FIN_TRIO
+NO_TRIO:
+    MOV AL, 0
+FIN_TRIO:
+ENDM
+
+DOSDOS MACRO
+    LOCAL ES_PAR
+    LOCAL FIN_DOS
+    MOV AL, AUX_MANO + 0
+    CMP AL, AUX_MANO + 1
+    JE ES_PAR
+    CMP AL, AUX_MANO + 2
+    JE ES_PAR
+    MOV AL, AUX_MANO + 1
+    CMP AL, AUX_MANO + 2
+    JE ES_PAR
+    MOV AL, 0
+    JMP FIN_DOS
+ES_PAR:
+    MOV AL, 2
+FIN_DOS:
+ENDM
+
 JMP INICIO
 
 
@@ -404,31 +437,20 @@ NO_PROFES:
 ES_ESCALA_FALSA:
     MOV AL, 5                ; Escala falsa
     JMP FIN_EVALUAR
+    
 REVISAR_TRIO:
-    ; 3. Trio (3 pts): ordenadas, si 1ra == 3ra, todas son iguales
-
-    MOV AL, AUX_MANO + 0
-    CMP AL, AUX_MANO + 2
-    JNE REVISAR_DOS
-    MOV AL, 3
-    JMP FIN_EVALUAR
+    ; 3. Trio (3 pts)
+    TRIOTRIO
+    CMP AL, 3
+    JE FIN_EVALUAR
 REVISAR_DOS:
-    ; 4. Dos (2 pts): ordenadas, dos iguales quedan juntas
-
-    MOV AL, AUX_MANO + 0
-    CMP AL, AUX_MANO + 1
-    JE ES_DOS
-
-    MOV AL, AUX_MANO + 1
-    CMP AL, AUX_MANO + 2
-    JE ES_DOS
-
+    ; 4. Dos (2 pts)
+    DOSDOS
+    CMP AL, 2
+    JE FIN_EVALUAR
     ; 5. Mano pobre (1 pt)
-
     MOV AL, 1
-    JMP FIN_EVALUAR
-ES_DOS:
-    MOV AL, 2
+
 FIN_EVALUAR:
     MOV AH, AUX_MANO + 2     ; Devolver en AH la carta mas alta
     POP DI
@@ -437,10 +459,6 @@ FIN_EVALUAR:
     POP BX
     RET
     
-
-
-
-
 MOSTRAR_MANO:
     PUSH AX
     PUSH BX
@@ -571,7 +589,7 @@ RESOLVER_RONDA:
     JA R_GANA_J1    ;Salta si el primero es mayor 
     JB R_GANA_J2    ;Salta si el primero es menor
     
-    ;Si los dos tienen mismos puntajes, se desempata con la carta m�s Carta mas alta
+    ;Si los dos tienen mismos puntajes, se desempata con la carta mas Carta mas alta
     CMP AL, 1
     JNE R_EMPATE        ;Salta si no es igual
     MOV AL, C_ALTA_J1
