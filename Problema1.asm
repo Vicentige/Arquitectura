@@ -1,4 +1,9 @@
-; Ejercicio 1: Acierta al resultado
+;Integrantes:-Gonzalo Fuenzalida
+;	         -Vicente Gonzalez
+;	         -Sergio Castillo
+;	         -Jose Carrasco 
+;
+;EJERCICIO NUMERO 1: Acierta al resultado
 
 org 100h
 

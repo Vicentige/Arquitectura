@@ -1,6 +1,9 @@
-; ================================
-; Ejercicio 2: Poker version ICI 
-; ================================
+;Integrantes:-Gonzalo Fuenzalida
+;	         -Vicente Gonzalez
+;	         -Sergio Castillo
+;	         -Jose Carrasco 
+;
+;EJERCICIO NUMERO 2: Poker version ICI 
 ORG 100h
      
 .DATA
